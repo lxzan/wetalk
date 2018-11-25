@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<button onclick="send()">Send</button>
+<script>
+    class SocketClient {
+        /**
+         * @param {string} dsn
+         */
+        constructor(dsn) {
+            this.dsn = dsn;
+            this.pingInterval = 20;
+            this.connect();
+        }
+
+        connect() {
+            // if (this.heartbeat !== undefined) clearInterval(this.heartbeat);
+            this.pong = Date.now();
+            this.conn = new WebSocket(this.dsn);
+            this.eventMap = {};
+            this.heartbeat = setInterval(() => {
+                this.conn.send(1);
+                if (Date.now() - this.pong > 10000 + 1000 * this.pingInterval) this.connect();
+            }, this.pingInterval * 1000);
+
+            this.conn.onmessage = (event) => {
+                if (event.data == 2) {
+                    this.pong = Date.now();
+                    return;
+                }
+                let msg = JSON.parse(event.data);
+                this.eventMap[msg._event](msg);
+            };
+        }
+
+        request(event, data, success) {
+            data._event = event;
+            data._id = this.messageID();
+            data._ack = true;
+            this.conn.send(JSON.stringify(data));
+
+            let ack = false;
+            this.on(data._event, function (msg) {
+                if (data._id !== msg._id) return;
+                ack = true;
+                success(msg);
+            });
+
+            setTimeout(() => {
+                if (!ack) {
+                    this.connect();
+                    setTimeout(() => {
+                        this.request(event, data, success);
+                    }, 500);
+                }
+            }, 5000);
+        }
+
+
+        /**
+         * @param {string} event
+         * @param {function} cb
+         */
+        on(event, cb) {
+            this.eventMap[event] = cb;
+        }
+
+        messageID() {
+            return Date.now() + '' + parseInt(1000 * Math.random());
+        }
+    }
+
+    let ws = new SocketClient('ws://127.0.0.1:3000/ws');
+
+    ws.on('test', function (e) {
+        console.log('it is a test');
+    });
+
+    function send() {
+        ws.request("test", {
+            hello: 'world'
+        }, function (reply) {
+            console.log(reply);
+        });
+    }
+</script>
+</body>
+</html>
