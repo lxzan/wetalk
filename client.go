@@ -13,11 +13,17 @@ type Client struct {
 	ping         int64
 	eventMapping map[string]MessageHandler
 	Request      *http.Request
-	Id           string
+	UID          string
 }
 
 func (this *Client) On(event string, handler MessageHandler) {
 	this.eventMapping[event] = handler
+}
+
+func (this *Client) OnClose(cb func(code int, text string) error) {
+	this.Conn.SetCloseHandler(func(code int, text string) error {
+		return cb(code, text)
+	})
 }
 
 func (this *Client) Send(event string, data JSON) {

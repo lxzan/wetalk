@@ -21,10 +21,10 @@ type Server struct {
 var server *Server
 
 type ServerConfig struct {
-	HeartbeatInterval time.Duration              // heartbeat interval, default 25s
-	Resend            time.Duration              // resend message, default 5s
-	Free              time.Duration              // free unused connections, default 30min
-	Passport          func(r *http.Request) bool // pass or reject connection
+	PingInterval int                        // heartbeat interval, default 25s
+	Resend       int                        // resend message, default 5s
+	Free         time.Duration              // free unused connections, default 30min
+	Passport     func(r *http.Request) bool // pass or reject connection
 }
 
 func NewServer(conf *ServerConfig) *Server {
@@ -42,19 +42,28 @@ func NewServer(conf *ServerConfig) *Server {
 
 func (this *Server) ServeWebSocket(w http.ResponseWriter, r *http.Request) {
 	conn, err := this.Upgrader.Upgrade(w, r, nil)
+
 	if err != nil {
 		log.Println(err)
 		return
 	}
+
+	uid := r.Header.Get("UID")
 	client := &Client{
 		Conn:         conn,
 		ping:         time.Now().Unix(),
 		eventMapping: make(map[string]MessageHandler),
 		Request:      r,
+		UID:          uid,
 	}
 
-	uid := r.Header.Get("X-User-Id")
 	server.Clients.Set(uid, client)
+	client.On("_conf", func(msg *Message) *Message {
+		return msg.Reply(JSON{
+			"pingInterval": this.Conf.PingInterval,
+			"resend":       this.Conf.Resend,
+		})
+	})
 	this.OnConnect(client)
 
 	for {
@@ -80,7 +89,3 @@ func (this *Server) ServeWebSocket(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
-//func (this *Server) OnConnect(cb func(client *Client)) {
-//
-//}

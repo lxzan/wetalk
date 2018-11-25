@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/lxzan/wetalk"
 	"net/http"
 	"time"
@@ -8,11 +9,11 @@ import (
 
 func main() {
 	socket := wetalk.NewServer(&wetalk.ServerConfig{
-		HeartbeatInterval: 25 * time.Second,
-		Resend:            5 * time.Second,
-		Free:              15 * time.Minute,
+		PingInterval: 25,
+		Resend:       5,
+		Free:         15 * time.Minute,
 		Passport: func(r *http.Request) bool {
-			r.Header.Set("X-User-ID", "1234")
+			r.Header.Set("UID", "caster")
 			return true
 		},
 	})
@@ -20,14 +21,18 @@ func main() {
 	socket.OnConnect = func(client *wetalk.Client) {
 		client.On("test", func(msg *wetalk.Message) *wetalk.Message {
 			return msg.Reply(wetalk.JSON{
-				"greet": "Hello!",
+				"hello": "world",
 			})
+		})
+
+		client.OnClose(func(code int, text string) error {
+			println(fmt.Sprintf("%s disconnected.", client.UID))
+			return nil
 		})
 	}
 
-	http.HandleFunc("/ws", socket.ServeWebSocket)
+	http.HandleFunc("/socket", socket.ServeWebSocket)
 
 	http.ListenAndServe(":3000", nil)
 
 }
-

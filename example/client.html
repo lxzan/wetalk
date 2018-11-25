@@ -15,18 +15,14 @@
         constructor(dsn) {
             this.dsn = dsn;
             this.pingInterval = 20;
+            this.resend = 10;
             this.connect();
         }
 
         connect() {
-            // if (this.heartbeat !== undefined) clearInterval(this.heartbeat);
             this.pong = Date.now();
             this.conn = new WebSocket(this.dsn);
             this.eventMap = {};
-            this.heartbeat = setInterval(() => {
-                this.conn.send('1');
-                if (Date.now() - this.pong > 10000 + 1000 * this.pingInterval) this.connect();
-            }, this.pingInterval * 1000);
 
             this.conn.onmessage = (event) => {
                 if (event.data === '2') {
@@ -36,6 +32,22 @@
                 let msg = JSON.parse(event.data);
                 this.eventMap[msg.header.event](msg);
             };
+
+            this.conn.onopen = () => {
+                this.send("_conf", {}, (reply) => {
+                    this.resend = reply.data.resend;
+                    this.pingInterval = reply.data.pingInterval;
+                    console.log(this);
+                    this.heartbeat();
+                });
+            };
+        }
+
+        heartbeat() {
+            setInterval(() => {
+                this.conn.send('1');
+                if (Date.now() - this.pong > 1000 * (this.resend + this.pingInterval)) this.connect();
+            }, 1000 * this.pingInterval);
         }
 
         /**
@@ -85,11 +97,7 @@
         }
     }
 
-    let ws = new SocketClient('ws://127.0.0.1:3000/ws');
-
-    ws.on('test', function (e) {
-        console.log('it is a test');
-    });
+    let ws = new SocketClient('ws://127.0.0.1:3000/socket');
 
     function send() {
         ws.send("test", {

@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="23502123-3840-4c0c-b71f-92630236ccab" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/message.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client.go" beforeDir="false" afterPath="$PROJECT_DIR$/client.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/client.html" beforeDir="false" afterPath="$PROJECT_DIR$/example/client.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/example/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.go" beforeDir="false" afterPath="$PROJECT_DIR$/server.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -27,8 +23,8 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="gitignore" value="1" />
-          <entry key="go" value="7" />
+          <entry key="gitignore" value="2" />
+          <entry key="go" value="9" />
           <entry key="html" value="1" />
           <entry key="md" value="1" />
           <entry key="mod" value="1" />
@@ -37,23 +33,24 @@
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="DTD" value="1" />
-          <entry key="Go" value="7" />
+          <entry key="Go" value="9" />
           <entry key="HTML" value="1" />
-          <entry key="PLAIN_TEXT" value="2" />
+          <entry key="PLAIN_TEXT" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="go" value="974" />
-          <entry key="html" value="235" />
+          <entry key="gitignore" value="18" />
+          <entry key="go" value="1319" />
+          <entry key="html" value="507" />
           <entry key="md" value="11" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="974" />
-          <entry key="HTML" value="235" />
-          <entry key="PLAIN_TEXT" value="11" />
+          <entry key="Go" value="1319" />
+          <entry key="HTML" value="507" />
+          <entry key="PLAIN_TEXT" value="29" />
         </counts>
       </usages-collector>
     </session>
@@ -69,11 +66,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="29" column="56" lean-forward="true" selection-start-line="29" selection-start-column="56" selection-end-line="29" selection-end-column="56" />
+            <state relative-caret-position="155">
+              <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
               <folding>
                 <element signature="e#12#83#0" expanded="true" />
               </folding>
@@ -81,11 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="271">
-              <caret line="23" column="14" lean-forward="true" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
+            <state relative-caret-position="120">
+              <caret line="23" column="31" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
               <folding>
                 <element signature="e#14#45#0" expanded="true" />
               </folding>
@@ -96,8 +93,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="353">
-              <caret line="59" column="9" lean-forward="true" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
+            <state relative-caret-position="200">
+              <caret line="65" column="6" selection-start-line="65" selection-start-column="6" selection-end-line="65" selection-end-column="6" />
               <folding>
                 <element signature="e#12#121#0" expanded="true" />
               </folding>
@@ -117,8 +114,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example/client.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-7">
-              <caret line="47" column="21" lean-forward="true" selection-start-line="47" selection-start-column="21" selection-end-line="47" selection-end-column="21" />
+            <state relative-caret-position="206">
+              <caret line="101" column="16" selection-start-line="101" selection-start-column="16" selection-end-line="101" selection-end-column="16" />
             </state>
           </provider>
         </entry>
@@ -161,9 +158,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/example/client.html" />
         <option value="$PROJECT_DIR$/message.go" />
+        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/client.go" />
+        <option value="$PROJECT_DIR$/example/client.html" />
         <option value="$PROJECT_DIR$/server.go" />
         <option value="$PROJECT_DIR$/example/main.go" />
       </list>
@@ -191,11 +189,6 @@
             <path>
               <item name="wetalk" type="b2602c69:ProjectViewProjectNode" />
               <item name="wetalk" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="wetalk" type="b2602c69:ProjectViewProjectNode" />
-              <item name="wetalk" type="462c0819:PsiDirectoryNode" />
-              <item name="example" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="wetalk" type="b2602c69:ProjectViewProjectNode" />
@@ -297,9 +290,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file:///usr/local/Cellar/go/1.11/libexec/src/html/template/template.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="171">
@@ -314,20 +304,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client.go">
+    <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="56" lean-forward="true" selection-start-line="29" selection-start-column="56" selection-end-line="29" selection-end-column="56" />
-          <folding>
-            <element signature="e#12#83#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="255">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/example/client.html">
+    <entry file="file://$PROJECT_DIR$/../../../../pkg/mod/github.com/gorilla/websocket@v1.4.0/conn.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-7">
-          <caret line="47" column="21" lean-forward="true" selection-start-line="47" selection-start-column="21" selection-end-line="47" selection-end-column="21" />
+        <state relative-caret-position="263">
+          <caret line="316" column="6" selection-start-line="316" selection-start-column="6" selection-end-line="316" selection-end-column="6" />
         </state>
       </provider>
     </entry>
@@ -338,10 +325,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/example/client.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="206">
+          <caret line="101" column="16" selection-start-line="101" selection-start-column="16" selection-end-line="101" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/server.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="353">
-          <caret line="59" column="9" lean-forward="true" selection-start-line="59" selection-start-column="9" selection-end-line="59" selection-end-column="9" />
+        <state relative-caret-position="200">
+          <caret line="65" column="6" selection-start-line="65" selection-start-column="6" selection-end-line="65" selection-end-column="6" />
           <folding>
             <element signature="e#12#121#0" expanded="true" />
           </folding>
@@ -350,10 +344,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/example/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="271">
-          <caret line="23" column="14" lean-forward="true" selection-start-line="23" selection-start-column="14" selection-end-line="23" selection-end-column="14" />
+        <state relative-caret-position="120">
+          <caret line="23" column="31" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
           <folding>
             <element signature="e#14#45#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="21" lean-forward="true" selection-start-line="21" selection-end-line="21" />
+          <folding>
+            <element signature="e#12#83#0" expanded="true" />
           </folding>
         </state>
       </provider>
