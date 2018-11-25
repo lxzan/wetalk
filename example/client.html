@@ -24,38 +24,48 @@
             this.conn = new WebSocket(this.dsn);
             this.eventMap = {};
             this.heartbeat = setInterval(() => {
-                this.conn.send(1);
+                this.conn.send('1');
                 if (Date.now() - this.pong > 10000 + 1000 * this.pingInterval) this.connect();
             }, this.pingInterval * 1000);
 
             this.conn.onmessage = (event) => {
-                if (event.data == 2) {
+                if (event.data === '2') {
                     this.pong = Date.now();
                     return;
                 }
                 let msg = JSON.parse(event.data);
-                this.eventMap[msg._event](msg);
+                this.eventMap[msg.header.event](msg);
             };
         }
 
-        request(event, data, success) {
-            data._event = event;
-            data._id = this.messageID();
-            data._ack = true;
-            this.conn.send(JSON.stringify(data));
+        /**
+         * @param {string} event
+         * @param {object} data
+         * @param {function} success
+         */
+        send(event, data, success) {
+            let msg = {
+                data,
+                header: {
+                    event,
+                    id: this.messageID(),
+                    ack: true,
+                }
+            };
+            this.conn.send(JSON.stringify(msg));
 
-            let ack = false;
-            this.on(data._event, function (msg) {
-                if (data._id !== msg._id) return;
-                ack = true;
-                success(msg);
+            let received = false;
+            this.on(event, function (reply) {
+                if (msg.header.id !== reply.header.id) return;
+                received = true;
+                success(reply);
             });
 
             setTimeout(() => {
-                if (!ack) {
+                if (!received) {
                     this.connect();
                     setTimeout(() => {
-                        this.request(event, data, success);
+                        this.send(event, data, success);
                     }, 500);
                 }
             }, 5000);
@@ -82,7 +92,7 @@
     });
 
     function send() {
-        ws.request("test", {
+        ws.send("test", {
             hello: 'world'
         }, function (reply) {
             console.log(reply);

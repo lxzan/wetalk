@@ -6,10 +6,10 @@ import (
 	"net/http"
 )
 
-type MessageHandler func(data string) JSON
+type MessageHandler func(msg *Message) *Message
 
 type Client struct {
-	conn         *websocket.Conn
+	Conn         *websocket.Conn
 	ping         int64
 	eventMapping map[string]MessageHandler
 	Request      *http.Request
@@ -22,12 +22,10 @@ func (this *Client) On(event string, handler MessageHandler) {
 
 func (this *Client) Send(event string, data JSON) {
 	bytes, _ := json.Marshal(data)
-	this.conn.WriteMessage(websocket.TextMessage, bytes)
+	this.Conn.WriteMessage(websocket.TextMessage, bytes)
 }
 
-func (this *Client) Reply(header *MessageHeader, data JSON) {
-	data["_id"] = header.ID
-	data["_event"] = header.Event
-	bytes, _ := json.Marshal(data)
-	this.conn.WriteMessage(websocket.TextMessage, bytes)
+func (this *Client) Reply(msg *Message) {
+	bytes, _ := json.Marshal(msg)
+	this.Conn.WriteMessage(websocket.TextMessage, bytes)
 }

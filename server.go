@@ -9,52 +9,45 @@ import (
 	"time"
 )
 
-var AuthHandler = func(r *http.Request) bool {
-	return true
-}
-
 type JSON map[string]interface{}
 
-type Message struct {
-	Event string
-	Id    string
-}
-
-var upgrader *websocket.Upgrader
-
 type Server struct {
-	Clients *ts.Map
+	Clients   *ts.Map
+	Upgrader  *websocket.Upgrader
+	Conf      *ServerConfig
+	OnConnect func(client *Client)
 }
 
 var server *Server
 
-type MessageHeader struct {
-	ID    string `json:"_id"`
-	Event string `json:"_event"`
-	Ack   bool   `json:"_ack"`
+type ServerConfig struct {
+	HeartbeatInterval time.Duration              // heartbeat interval, default 25s
+	Resend            time.Duration              // resend message, default 5s
+	Free              time.Duration              // free unused connections, default 30min
+	Passport          func(r *http.Request) bool // pass or reject connection
 }
 
-func NewServer() *Server {
+func NewServer(conf *ServerConfig) *Server {
 	server = &Server{
 		Clients: ts.NewMap(),
-	}
-
-	upgrader = &websocket.Upgrader{
-		ReadBufferSize:  1024,
-		WriteBufferSize: 1024,
-		CheckOrigin:     AuthHandler,
+		Conf:    conf,
+		Upgrader: &websocket.Upgrader{
+			ReadBufferSize:  1024,
+			WriteBufferSize: 1024,
+			CheckOrigin:     conf.Passport,
+		},
 	}
 	return server
 }
 
-func (this *Server) OnConnect(w http.ResponseWriter, r *http.Request, cb func(client *Client)) {
-	conn, err := upgrader.Upgrade(w, r, nil)
+func (this *Server) ServeWebSocket(w http.ResponseWriter, r *http.Request) {
+	conn, err := this.Upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 	client := &Client{
-		conn:         conn,
+		Conn:         conn,
 		ping:         time.Now().Unix(),
 		eventMapping: make(map[string]MessageHandler),
 		Request:      r,
@@ -62,8 +55,8 @@ func (this *Server) OnConnect(w http.ResponseWriter, r *http.Request, cb func(cl
 
 	uid := r.Header.Get("X-User-Id")
 	server.Clients.Set(uid, client)
+	this.OnConnect(client)
 
-	cb(client)
 	for {
 		_, p, err := conn.ReadMessage()
 		if err != nil {
@@ -71,19 +64,23 @@ func (this *Server) OnConnect(w http.ResponseWriter, r *http.Request, cb func(cl
 			return
 		}
 		if string(p) == "1" {
-			client.conn.WriteMessage(websocket.TextMessage, []byte("2"))
+			client.Conn.WriteMessage(websocket.TextMessage, []byte("2"))
 			client.ping = time.Now().Unix()
 		} else {
-			var header = &MessageHeader{}
-			json.Unmarshal(p, header)
-			fn, exist := client.eventMapping[header.Event]
+			var msg = &Message{}
+			json.Unmarshal(p, msg)
+			fn, exist := client.eventMapping[msg.Header.Event]
 			if exist {
-				if header.Ack {
-					client.Reply(header, fn(string(p)))
+				if msg.Header.Ack {
+					client.Reply(fn(msg))
 				} else {
-					fn(string(p))
+					fn(msg)
 				}
 			}
 		}
 	}
 }
+
+//func (this *Server) OnConnect(cb func(client *Client)) {
+//
+//}
